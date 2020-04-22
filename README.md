@@ -9,6 +9,8 @@
 
 1、通过 `js hook` 到 `XMLHttpRequest` 的请求，
 
+![](http://img.andrewblog.cn/blog/20200422/jedajV4esIoj.png)
+
 2、判断请求中是否有加密参数
 
 3、取消请求
