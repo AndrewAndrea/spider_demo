@@ -38,3 +38,8 @@
 ## 二、wenshu app 的逆向
 
 这个真的简单。而且网上到处都有。
+
+## 三、 FaceBook js破解
+
+## 四、KuGouTop500
+
