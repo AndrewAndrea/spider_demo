@@ -84,3 +84,11 @@ AreaSpider 文件夹下的 area 文件夹。执行 `main.py` 就可以了。然�
 ![](http://img.andrewblog.cn/blog/20200606/i8p5xxWRRy35.png-shuiyin)
 
 ![](http://img.andrewblog.cn/blog/20200606/wxfM9xOUk1f5.png-shuiyin)
+
+## 七、qcc 请求频繁类似 ob 的 js 。以及登陆
+
+qcc 请求频繁会直接返回一个 混淆 js, 这个 js 会生成一个新的 cookie的值，更新到cookie中。
+
+`qcc_ob_js/qcc_cookie_parse_16.js` 已经做了处理，使用 AST做的处理，参考蔡老板的文章，该文件可以直接在 node环境下运行，使用 express 做服务。需要安装相关的库。
+
+登陆就是个阿里的滑动，晚点放个 demo。特别简单，百度就有。
