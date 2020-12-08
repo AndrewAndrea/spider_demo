@@ -1,5 +1,4 @@
 # spider_demo
-
 个人爬虫练习代码，一点点总结上传。
 
 * [spider\_demo](#spider_demo)
@@ -11,6 +10,8 @@
   * [六、中华人民共和国行政区划（五级）：省级、地级、县级、乡级和村级。](#%E5%85%AD%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92%E4%BA%94%E7%BA%A7%E7%9C%81%E7%BA%A7%E5%9C%B0%E7%BA%A7%E5%8E%BF%E7%BA%A7%E4%B9%A1%E7%BA%A7%E5%92%8C%E6%9D%91%E7%BA%A7)
   * [七、qcc 请求频繁类似 ob 的 js 。以及登陆](#%E4%B8%83qcc-%E8%AF%B7%E6%B1%82%E9%A2%91%E7%B9%81%E7%B1%BB%E4%BC%BC-ob-%E7%9A%84-js-%E4%BB%A5%E5%8F%8A%E7%99%BB%E9%99%86)
   * [八、tb\_slide 滑动demo](#%E5%85%ABtb_slide-%E6%BB%91%E5%8A%A8demo)
+  * [九、头条 \_signature、\_signature、 \_\_ac\_nonce、 \_\_ac\_signature参数](#%E4%B9%9D%E5%A4%B4%E6%9D%A1-_signature_signature-__ac_nonce-__ac_signature%E5%8F%82%E6%95%B0)
+    * [cookie 中的 \_\_ac\_nonce \_\_ac\_signature](#cookie-%E4%B8%AD%E7%9A%84-__ac_nonce-__ac_signature)
 
 ## 一、wenshu的 js hook
 
@@ -55,11 +56,9 @@
 ## 四、KuGouTop500
 
 ## 五、duapp_unidbg 调用 so
-
  在大佬 [@zhaoboy9692](https://github.com/zhaoboy9692/dailyanalysis/tree/master/%E6%AF%92unidbg) 代码上做了简单的修改
 
 ## 六、中华人民共和国行政区划（五级）：省级、地级、县级、乡级和村级。
-
 [关于更新全国统计用区划代码和城乡划分代码的公告](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2019/index.html)
 
 ![](http://img.andrewblog.cn/blog/20200604/ucRNtuUyWRE6.png-shuiyin)
@@ -114,6 +113,114 @@ qcc 请求频繁会直接返回一个 混淆 js, 这个 js 会生成一个新的
 
 demo可以直接运行。
 
+## 九、头条 _signature、_signature、 __ac_nonce、 __ac_signature参数
+
+接口中有参数 `_signature` 参数
+
+![](http://img.andrewblog.cn/qiniu_PicGoimage-20201022115056889.png-shuiyin)
+
+
+
+直接全局搜索这个参数，会在一个 `index-*.js` 中搜索到, 虽然 `captcha.js` 中也有，不过没用 
+
+![](http://img.andrewblog.cn/qiniu_PicGoimage-20201022115344290.png-gg)
+
+在文件中找到该字符串位置，打断点，调试。
+
+![](http://img.andrewblog.cn/qiniu_PicGoimage-20201022115939303.png-gg)
+
+继续下一步，调试会跳转到 `acrawler.js` 文件中. 
+
+![](http://img.andrewblog.cn/qiniu_PicGoimage-20201022120219522.png-gg)
+
+`acrawler.js` 文件
+
+![](http://img.andrewblog.cn/qiniu_PicGoimage-20201022120847497.png-gg)
+
+
+
+下一步直接将 js 文件拿出来， 执行。
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203165354610.png-gg)
+
+1、简化 `js`, 删除一些没有用的东西
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203164718585.png-gg)
+
+参数后改为空列表即可
+
+2、`node` 中 `window` 为 `global`
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203165044166.png-gg)
+
+定义
+
+```js
+var window = global;
+```
+
+继续执行，缺啥补啥（调试打印 `Z[S]`，就可以知道缺啥了 ）
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203165436808.png-gg)
+
+<img src="http://img.andrewblog.cn/workqiniu/carbon (1).png-gg" style="zoom:50%;" />
+
+```js
+window.location = params.location;
+window.navigator = params.navigator;
+```
+
+然后就可以出来短的了
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203171616949.png-gg)
+
+- 有个问题加了下面的代码就会报错 
+
+```js
+window.byted_acrawler && window.byted_acrawler.init({
+                aid: 24,
+                dfp: !0
+            });
+```
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203171543843.png-gg)
+
+注释掉就可以，不知道啥原因。
+
+长的 `_signature` 需要加 `cookie`,把 `cookie` 放进去就 ok 了。放在主要加密函数的后面，放在前面没用。不生效
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203172028896.png-gg)
+
+结果：
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203172133438.png-gg)
+
+测试一下
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203173600786.png-gg)
+
+请求 `api/pc/feed` 接口时，需要在前面加上 `toutiao` 进行加密。
+
+### cookie 中的 __ac_nonce __ac_signature
+
+直接请求详情，不携带 `cookie`, 会响应 cookie  ` __ac_nonce`
+
+![image-20201203175421719](http://img.andrewblog.cn/workqiniu/image-20201203175421719.png-gg)
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203175755230.png-gg)
+
+通过 ` __ac_nonce` 生成 `__ac_signature`
+
+直接调用上面的方法即可
+
+```js
+function f2(__ac_nonce){
+    ac_signature = window.byted_acrawler.sign("", __ac_nonce);
+    return ac_signature
+}
+```
+
+![](http://img.andrewblog.cn/workqiniu/image-20201203185022708.png-gg)
 --------------------------------------------------------------------------------------------------------------------------------------
 
 如果对你有用，欢迎 star
