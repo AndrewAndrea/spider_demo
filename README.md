@@ -12,6 +12,7 @@
   * [八、tb\_slide 滑动demo](#%E5%85%ABtb_slide-%E6%BB%91%E5%8A%A8demo)
   * [九、头条 \_signature、\_signature、 \_\_ac\_nonce、 \_\_ac\_signature参数](#%E4%B9%9D%E5%A4%B4%E6%9D%A1-_signature_signature-__ac_nonce-__ac_signature%E5%8F%82%E6%95%B0)
     * [cookie 中的 \_\_ac\_nonce \_\_ac\_signature](#cookie-%E4%B8%AD%E7%9A%84-__ac_nonce-__ac_signature)
+  * [十、signature 更新 (2021-02-20)]
 
 ## 一、wenshu的 js hook
 
@@ -223,7 +224,17 @@ function f2(__ac_nonce){
 
 ![](http://img.andrewblog.cn/workqiniu/image-20201203185022708.png-gg)
 
-## signature 更新 (2021-02-20)
+## 十、signature 更新 (2021-02-20)
+
+现在加 `cookie` 生成出来的变短了，不是原来那个长长的了
+
+![image-20210201150223602](http://img.andrewblog.cn/workqiniu/image-20210201150223602.png-gg)
+
+按照原来的跑会出来这么个错误
+
+![image-20210201150510043](http://img.andrewblog.cn/workqiniu/image-20210201150510043.png-gg)
+
+原来整个代码还是可以用的，并且是可以抓取到数据到，就是需要频繁的更换 ip
 关注我的公众号 *Python爬虫scrapy*
 --------------------------------------------------------------------------------------------------------------------------------------
 
